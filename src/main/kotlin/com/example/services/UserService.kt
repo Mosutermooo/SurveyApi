@@ -8,7 +8,7 @@ import com.example.models.user_models.UserResponseParam
 
 interface UserService {
     suspend fun registerUser(params: RegisterUserParams): UserResponseParam
-    suspend fun findUserByEmail(email: String): Boolean
+    suspend fun findUserByEmail(email: String): User?
     suspend fun loginUser(params: LoginUserParams): UserResponseParam
 
 }

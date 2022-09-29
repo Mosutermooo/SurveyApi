@@ -12,6 +12,7 @@ import org.jetbrains.exposed.sql.select
 import org.mindrot.jbcrypt.BCrypt
 
 class UserServiceImpl : UserService {
+
     override suspend fun registerUser(params: RegisterUserParams): UserResponseParam {
         val result = dbQuery{
             UsersTable.insert {
@@ -35,18 +36,28 @@ class UserServiceImpl : UserService {
 
     }
 
-    override suspend fun findUserByEmail(email: String): Boolean {
-        dbQuery {
+    override suspend fun findUserByEmail(email: String): User? {
+        return dbQuery {
             UsersTable.select{ UsersTable.email.eq(email) }
                 .map {
                     rowToUser(it)
                 }.singleOrNull()
-        } ?: return false
-        return true
+        }
     }
 
     override suspend fun loginUser(params: LoginUserParams): UserResponseParam {
-        TODO("Not yet implemented")
+        val user = findUserByEmail(params.email)
+            ?: return UserResponseParam("User does not exist", false)
+
+        user.token = "asdasd"
+
+        return UserResponseParam(
+            "User ${user.name}",
+            true,
+            user
+        )
+
+
     }
 
     private fun rowToUser(row: ResultRow?): User? {
