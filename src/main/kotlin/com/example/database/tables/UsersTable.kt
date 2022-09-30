@@ -10,6 +10,7 @@ object UsersTable: Table("users") {
     val lastname = varchar("lastname", 2000)
     val email = varchar("email", 2000)
     val password = text("password")
+    val role = varchar("role", 200)
     override val primaryKey = PrimaryKey(id)
 
 }

@@ -11,5 +11,6 @@ class User (
     val name: String,
     val lastname: String,
     val email: String,
-    var token: String? = null
+    var token: String? = null,
+    var role: String
         )

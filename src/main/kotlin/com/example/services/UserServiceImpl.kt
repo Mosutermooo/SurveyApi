@@ -6,6 +6,7 @@ import com.example.models.user_models.LoginUserParams
 import com.example.models.user_models.RegisterUserParams
 import com.example.models.user_models.User
 import com.example.models.user_models.UserResponseParam
+import com.example.secutiry.JwtConfig
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -21,6 +22,7 @@ class UserServiceImpl : UserService {
                 it[lastname] = params.lastname
                 it[email] = params.email
                 it[password] = hashPassword(params.password)
+                it[role] = "user"
             }
         }
         if(result.insertedCount == 1){
@@ -49,7 +51,9 @@ class UserServiceImpl : UserService {
         val user = findUserByEmail(params.email)
             ?: return UserResponseParam("User does not exist", false)
 
-        user.token = "asdasd"
+        val token = JwtConfig.instance.createAccessToken(user.userId)
+
+        user.token = token
 
         return UserResponseParam(
             "User ${user.name}",
@@ -68,6 +72,7 @@ class UserServiceImpl : UserService {
             name = row[UsersTable.name],
             lastname = row[UsersTable.lastname],
             email = row[UsersTable.email],
+            role = row[UsersTable.role]
         )
     }
     private fun generateUserId(): String {

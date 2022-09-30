@@ -4,6 +4,7 @@ import com.example.database.Database
 import com.example.repositories.UserRepository
 import com.example.repositories.UserRepositoryImpl
 import com.example.routing.userRoutes
+import com.example.secutiry.configureSecurity
 import com.example.services.UserService
 import com.example.services.UserServiceImpl
 import io.ktor.server.application.*
@@ -21,7 +22,7 @@ fun main(){
         install(ContentNegotiation){
             json()
         }
-
+        configureSecurity()
         val userService : UserService = UserServiceImpl()
         val userRepository : UserRepository = UserRepositoryImpl(userService)
         userRoutes(userRepository)

@@ -22,6 +22,7 @@ fun Application.userRoutes(service: UserRepository){
                 val result = service.loginUser(params)
                 call.respond(result)
             }
+
         }
     }
 }
